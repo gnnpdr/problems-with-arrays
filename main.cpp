@@ -1,26 +1,30 @@
 #include <stdio.h>
-#include <assert.h>
 
-void move_elements (int array[], size_t size);
+int printmas (int intmas[][4], size_t amount_of_rows, size_t amount_of_elements_in_row);
 
-int main()
+int main ()
 {
-    int array[] = {1, 2, 3, 4, 5};
-    const size_t size = sizeof(array)/sizeof(array[0]); 
+    int array [3][4]={
+                          {10, 9, 98, 65},
+                          {8 ,-9, -4,  6},
+                          {15, 6, 78, -8}
+                         };
 
-    move_elements (array, size);
-
-    return 0;  
+    const size_t amount_of_rows = (sizeof(array)/sizeof(array[0]));
+    const size_t amount_of_eliments_in_row  = sizeof(array[0])/sizeof(array[0][0]); 
+    
+    printmas(array, amount_of_rows, amount_of_eliments_in_row);
 }
 
-void move_elements (int array[], size_t size)
+int printmas (int intmas[][4], size_t amount_of_rows, size_t amount_of_elements_in_row)
 {
-    for (size_t i = 0; i < size; i++)
-    {
-        assert (i   < size);
-        assert (i+1 < size);  //brings asser to the final element of array
+   for(size_t element_in_row = 0; element_in_row < amount_of_elements_in_row; element_in_row++)  
+   {
+     for(size_t row = 0; row < amount_of_rows; row++) 
+       {
+         printf("%d ", intmas[element_in_row][row]);
+       }
+     printf("\n"); 
+   } 
 
-        array[i] = array[i+1];
-        printf("%d\n", array[i]);
-    }
 }
