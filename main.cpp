@@ -13,7 +13,7 @@ int main()
     const size_t amount_of_el = sizeof(ar1[0])/sizeof(ar1[0][0]);
 
     int ar2[][3] = {
-        {2, 3, 5}, 
+        {3, 3, 5}, 
         {6, 7, 8}, 
         };
 
