@@ -2,8 +2,6 @@
 
 void sum_arrays (int* ar1, int* ar2, size_t amount_of_str, size_t amount_of_el);
 
-// hello git
-
 int main()
 {
     int ar1[][3] = {
