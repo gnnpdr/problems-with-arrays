@@ -1,33 +1,93 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-int printmas (int* intmas, size_t amount_of_str, size_t amount_of_elements_in_str); 
+struct TriangAr
+    {
+        size_t size;
+        int* result;
+    };
+
+void enter_size (TriangAr* the_table);
+
+void initial_struct (TriangAr* the_table);
+void find_capacity (int size, int* capacity); 
+
+void full_out_el (TriangAr* the_table);
+void find_el(int row, int col, int* els);
+
+void print_el (TriangAr* the_table);
+
+void clean (TriangAr* the_table);
+
+//void clean_place()
 
 int main ()
 {
-	int ar[][3] = 
-        {
-        {1, 2, 3},
-        {4, 5, 6},
-        {7, 8, 9}
-        };
+    TriangAr the_table = {};
 
-    const size_t amount_of_str = (sizeof(ar)/sizeof(ar[0]));
-    const size_t amount_of_eliments_in_str  = sizeof(ar[0])/sizeof(ar[0][0]); 
+    enter_size(&the_table);
 
-    printmas(*ar, amount_of_str, amount_of_eliments_in_str);      
+    initial_struct(&the_table);
 }
 
-int printmas (int* intmas, size_t amount_of_str, size_t amount_of_elements_in_str) 
+
+void enter_size(TriangAr* the_table)
 {
-   for(size_t str = 0; str < amount_of_str; str++)  
-   {
-        for(size_t el = 0; el < amount_of_elements_in_str; el++) 
-        {
-            if (el < str)
-            {
-                printf("%d ", *(intmas + str*amount_of_elements_in_str + el));
-            }
-        }
-        printf("\n");
-   } 
+    scanf("%d", &the_table->size);
+}
+
+void initial_struct (TriangAr* the_table)
+{
+    int capacity = 0;
+
+    find_capacity(the_table->size, &capacity);
+ 
+    the_table->result = (int *)calloc(capacity, sizeof(int));
+
+    if (the_table->result == nullptr)
+    {
+        printf("bad end\n");
+        exit(EXIT_FAILURE);
+    }
+}
+
+void find_capacity (int size, int* capacity)  //ar pr
+{
+    for(int i = 0; i <= size; i++)
+        *capacity += i;
+}
+
+void full_out_el (TriangAr* the_table)
+{
+    size_t row = 0, col = 0;
+    scanf("%d", &row);
+    scanf("%d", &col);
+
+    int els = 0;
+    find_el(row, col, &els);
+
+    scanf("%d", &(the_table->result) + els);
+}
+
+find_el(int row, int col, int* els)
+{
+    find_capacity(row-1, els);
+    *els += col;
+}
+
+void print_el (TriangAr* the_table)
+{
+    size_t row = 0, col = 0;
+    scanf("%d", &row);
+    scanf("%d", &col);
+
+    int els = 0;
+    find_el(row, col, &els);
+
+    printf("%d", &(the_table->result) + els);
+}
+
+void clean (TriangAr* the_table)
+{
+    free(the_table->result);
 }
