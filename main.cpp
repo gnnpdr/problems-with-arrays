@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int printmas (int intmas[][4], size_t amount_of_rows, size_t amount_of_elements_in_row);
+int printmas (int* intmas, size_t amount_of_rows, size_t amount_of_elements_in_row); // int* intmas
 
 int main ()
 {
@@ -13,18 +13,18 @@ int main ()
     const size_t amount_of_rows = (sizeof(array)/sizeof(array[0]));
     const size_t amount_of_eliments_in_row  = sizeof(array[0])/sizeof(array[0][0]); 
     
-    printmas(array, amount_of_rows, amount_of_eliments_in_row);
+    printmas(*array, amount_of_rows, amount_of_eliments_in_row);      //*array
 }
 
-int printmas (int intmas[][4], size_t amount_of_rows, size_t amount_of_elements_in_row)
+int printmas (int* intmas, size_t amount_of_rows, size_t amount_of_elements_in_row) 
 {
-   for(size_t element_in_row = 0; element_in_row < amount_of_elements_in_row; element_in_row++)  
+   for(size_t row = 0; row < amount_of_rows; row++)  
    {
-     for(size_t row = 0; row < amount_of_rows; row++) 
+     for(size_t element_in_row = 0; element_in_row < amount_of_elements_in_row; element_in_row++) 
        {
-         printf("%d ", intmas[element_in_row][row]);
+         printf("%d ", *((int*)intmas + amount_of_elements_in_row*row + element_in_row));
        }
-     printf("\n"); 
+      printf("\n");
    } 
-
+    
 }
