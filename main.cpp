@@ -19,15 +19,17 @@ void print_el (TriangAr* the_table);
 
 void clean (TriangAr* the_table);
 
-//void clean_place()
+void print_ar(TriangAr* the_table, int capacity);
 
 int main ()
 {
     TriangAr the_table = {};
 
+    int capacity = 0;
+
     enter_size(&the_table);
 
-    initial_struct(&the_table);
+    initial_struct(&the_table); 
 }
 
 
@@ -36,11 +38,9 @@ void enter_size(TriangAr* the_table)
     scanf("%d", &the_table->size);
 }
 
-void initial_struct (TriangAr* the_table)
+void initial_struct (TriangAr* the_table, int* capacity)
 {
-    int capacity = 0;
-
-    find_capacity(the_table->size, &capacity);
+    find_capacity(the_table->size, capacity);
  
     the_table->result = (int *)calloc(capacity, sizeof(int));
 
@@ -90,4 +90,18 @@ void print_el (TriangAr* the_table)
 void clean (TriangAr* the_table)
 {
     free(the_table->result);
+}
+
+void print_ar(TriangAr* the_table, int capacity)  //here capacity was found
+{
+    int k = 0;
+
+    for (int row = 0; row < the_table->size; row++)
+    {
+        for (int col = 0; col <= row; col++)
+        {
+            printf("%d", &(the_table->result) + k);
+            k++;
+        }
+    }
 }
