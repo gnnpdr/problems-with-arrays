@@ -1,25 +1,27 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
+#include <math.h>
 
 struct TriangAr
-    {
-        size_t size;
-        int* result;
-    };
+{
+    size_t table_lenght;
+    int* result;
+};
 
-void enter_size (TriangAr* the_table);
+void enter_table_lenght (TriangAr* the_table);
 
 void initial_struct (TriangAr* the_table, int *const capacity);
-void find_capacity (const int size, int *const capacity); 
+void arithmetic_progression (const int table_lenght, int *const capacity); 
 
-void full_out_el (TriangAr* the_table);
-void find_el(const int row, const int col, int *const els);
+void fill_element (TriangAr* the_table);
+void find_element(const int row, const int col, int *const elements);
 
-void print_el (TriangAr* the_table);
+void print_element (TriangAr* the_table);
 
 void clean (TriangAr* the_table);
 
-void print_ar(TriangAr* the_table, const int capacity);
+void print_array(TriangAr* the_table, const int capacity);
 
 int main ()
 {
@@ -27,16 +29,16 @@ int main ()
 
     int capacity = 0;
 
-    enter_size(&the_table);
+    enter_table_lenght(&the_table);
 
     initial_struct(&the_table, &capacity); 
 }
 
-
-void enter_size(TriangAr* the_table)
+void enter_table_lenght(TriangAr* the_table)
 {
     assert (the_table != nullptr);
-    scanf("%d", &the_table->size);
+
+    scanf("%d", &the_table->table_lenght);
 }
 
 void initial_struct (TriangAr* the_table, int *const capacity)
@@ -44,9 +46,9 @@ void initial_struct (TriangAr* the_table, int *const capacity)
     assert (the_table != nullptr);
     assert (capacity != nullptr);
 
-    find_capacity(the_table->size, capacity);
+    arithmetic_progression(the_table->table_lenght, capacity);
  
-    the_table->result = (int *)calloc(capacity, sizeof(int));
+    the_table->result = (int *)calloc(*capacity, sizeof(int));
 
     if (the_table->result == nullptr)
     {
@@ -55,16 +57,14 @@ void initial_struct (TriangAr* the_table, int *const capacity)
     }
 }
 
-void find_capacity (const int size, int *const capacity)  //ar pr
-{
-    assert (size != NULL);
+void arithmetic_progression (const int table_lenght, int *const capacity)  //arifm pr
+{ 
     assert (capacity != nullptr);
 
-    for(int i = 0; i <= size; i++)
-        *capacity += i;
+    *capacity = (1 + table_lenght) / 2;
 }
 
-void full_out_el (TriangAr* the_table)
+void fill_element (TriangAr* the_table)
 {
     assert (the_table != nullptr);
 
@@ -72,23 +72,21 @@ void full_out_el (TriangAr* the_table)
     scanf("%d", &row);
     scanf("%d", &col);
 
-    int els = 0;
-    find_el(row, col, &els);
+    int elements = 0;
+    find_element(row, col, &elements);
 
-    scanf("%d", &(the_table->result) + els);
+    scanf("%d", &(the_table->result) + elements);
 }
 
-void find_el(const int row, const int col, int *const els)
+void find_element(const int row, const int col, int *const elements)
 {
-    assert (row != NULL);
-    assert (col != NULL);
-    assert (els != nullptr);
+    assert (elements != nullptr);
 
-    find_capacity(row-1, els);
-    *els += col;
+    arithmetic_progression(row-1, elements);
+    *elements += col;
 }
 
-void print_el (TriangAr* the_table)
+void print_element (TriangAr* the_table)
 {
     assert (the_table != nullptr);
 
@@ -96,10 +94,10 @@ void print_el (TriangAr* the_table)
     scanf("%d", &row);
     scanf("%d", &col);
 
-    int els = 0;
-    find_el(row, col, &els);
+    int elements = 0;
+    find_element(row, col, &elements);
 
-    printf("%d", &(the_table->result) + els);
+    printf("%d", &(the_table->result) + elements);   
 }
 
 void clean (TriangAr* the_table)
@@ -109,14 +107,13 @@ void clean (TriangAr* the_table)
     free(the_table->result);
 }
 
-void print_ar(TriangAr* the_table, const int capacity)  //here capacity was found
+void print_array(TriangAr* the_table, const int capacity) 
 {
     assert (the_table != nullptr);
-    assert (capacity != nullptr);
 
     int k = 0;
 
-    for (int row = 0; row < the_table->size; row++)
+    for (int row = 0; row < the_table->table_lenght; row++)
     {
         for (int col = 0; col <= row; col++)
         {
