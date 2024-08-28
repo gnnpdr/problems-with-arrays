@@ -8,7 +8,7 @@ struct ArrayData
     int capacity;
 
     int* result;
-    int** addresses;
+    int* amount_of_elements_in_row;
 };
 
 void enter_amount_of_rows(ArrayData* the_table, bool *const right_enter);
@@ -57,7 +57,7 @@ void enter_amount_of_rows(ArrayData* the_table, bool *const right_enter)
     printf("how much rows do you want to have\n");
     scanf("%d", &the_table->rows);
 
-    the_table->addresses = (int**)calloc(the_table->rows, sizeof(int *));
+    the_table->amount_of_elements_in_row = (int*)calloc(the_table->rows, sizeof(int));
 
     if (&the_table->result == nullptr)
     {
@@ -73,13 +73,12 @@ void finding_capacity(ArrayData* the_table, bool *const right_enter)
 
     for (int i = 1; i <= the_table->rows; i++)                    //calculation starts at 1 for users convenience
     {
-        the_table->addresses[i - 1] = the_table->result;// + the_table->capacity;     //fills addresses by addresses of new rows
-
-        printf("%p\n %p\n", the_table->addresses[i - 1], the_table->result/* + the_table->capacity*/);
-
         printf("how much cells do you want to have in the %d row?\n", i);
 
         scanf("%d", &capacity_delta);
+        the_table->amount_of_elements_in_row[i-1] = capacity_delta;
+
+        //printf("it prints %d %d\n", the_table->amount_of_elements_in_row[i-1], capacity_delta);
         the_table->capacity += capacity_delta;                   //data about amount of cells
     }
 
@@ -107,21 +106,23 @@ void print_all_cells (ArrayData* the_table)
 {
     assert(the_table != nullptr);
 
-    int y = 1;
+    int y = 0;
+    int cnt = 0;
 
     printf("you have printed this:\n");
 
     for (int i = 0; i < the_table->capacity; i++)
     {   
+        cnt++;
         int* cell_address = the_table->result + i; 
 
-        printf("%p\n %p\n", cell_address, the_table->addresses[y]);
-        if (cell_address == the_table->addresses[y])
+        if (cnt == the_table->amount_of_elements_in_row[y])
         {
             printf("\n");
             y++;
+            cnt = 0;
         }
-
+        
         printf("%d ", *(the_table->result + i));     //address addition
     }
 }
@@ -158,7 +159,7 @@ void free_place (ArrayData* the_table)
 {
     assert(the_table != nullptr);
     
-    free(the_table->addresses);
+    free(the_table->amount_of_elements_in_row);
     free(the_table->result);
     printf("place is free\n");
 }
