@@ -11,15 +11,15 @@ struct TriangAr
 
 void enter_table_lenght (TriangAr* the_table);
 
-void initial_struct (TriangAr* the_table, int *const capacity);
+void initial_struct (TriangAr* the_table, int *const capacity);         //rename
 void arithmetic_progression (const int table_lenght, int *const capacity); 
 
 void fill_element (TriangAr* the_table);
-void find_element(const int row, const int col, int *const elements);
+void find_element(const int row, const int col, int *const elements);  //rename
 
 void print_element (TriangAr* the_table);
 
-void clean (TriangAr* the_table);
+void clean (TriangAr* the_table);                                    //rename
 
 void print_array(TriangAr* the_table, const int capacity);
 
@@ -57,8 +57,8 @@ void initial_struct (TriangAr* the_table, int *const capacity)
     }
 }
 
-void arithmetic_progression (const int table_lenght, int *const capacity)  //arifm pr
-{ 
+void arithmetic_progression (const int table_lenght, int *const capacity)  //arifm pr 
+{                                                                          //rename int 
     assert (capacity != nullptr);
 
     *capacity = (1 + table_lenght) / 2;
@@ -113,7 +113,7 @@ void print_array(TriangAr* the_table, const int capacity)
 
     int k = 0;
 
-    for (int row = 0; row < the_table->table_lenght; row++)
+    for (int row = 0; row < the_table->table_lenght; row++)  //variat
     {
         for (int col = 0; col <= row; col++)
         {
