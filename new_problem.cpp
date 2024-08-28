@@ -42,8 +42,8 @@ int main ()
 
     print_all_cells (&the_table);
 
-    //change_one_element (&the_table);
-    //print_one_element (&the_table);
+    change_one_element (&the_table);
+    print_one_element (&the_table);
 
     free_place (&the_table);
 
@@ -79,7 +79,6 @@ void finding_capacity(ArrayData* the_table, bool *const right_enter)
 
         scanf("%d", &capacity_delta);
         the_table->amount_of_elements_in_row[i-1] = capacity_delta;
-        //printf("el %d\n", the_table->amount_of_elements_in_row[i-1]);
 
         the_table->capacity += capacity_delta;                   //data about amount of cells
     }
@@ -100,7 +99,6 @@ void finding_capacity(ArrayData* the_table, bool *const right_enter)
             the_table->addresses[i] = &(the_table->result[j]);
             cnt = 0;
             r++;
-            printf("%p %p", &(the_table->result[j]), the_table->addresses[i]);
             i++;
         } 
         cnt++;
@@ -142,20 +140,20 @@ void print_all_cells (ArrayData* the_table)
     printf("\n");
 }
 
-/*void print_one_element (ArrayData* the_table)
+void print_one_element (ArrayData* the_table)
 {
     assert (the_table != nullptr);
 
-    printf("print row and col of cell you want to know");
+    printf("print row and col of cell you want to know?\n");
 
     size_t row = 0, col = 0;
     scanf("%d", &row);
     scanf("%d", &col);
 
     printf("here it is\n");
-    printf("%d\n", the_table->result + the_table->amount_of_elements_in_row[row-1] + col);   
+    printf("%d\n", *(the_table->addresses[row - 1] + col - 1));   
 }
-//the_table->addresses[row-1][col-1]
+
 void change_one_element (ArrayData* the_table)
 {
     assert (the_table != nullptr);
@@ -168,8 +166,8 @@ void change_one_element (ArrayData* the_table)
 
     printf("print its value\n");
 
-    scanf("%d", the_table->addresses[row-1]+col-1);   
-}*/
+    scanf("%d", the_table->addresses[row - 1] + col - 1);   
+}
 
 void free_place (ArrayData* the_table)
 {
@@ -179,15 +177,3 @@ void free_place (ArrayData* the_table)
     free(the_table->result);
     printf("place is free\n");
 }
-
-
-// int data[2][3] = {};
-
-// data[1][2] = *(data + 1 * sizeof( data[0]) + 2);
-
-// int **data2 = (int **)data;
-
-// data2[1][2] = *(*(data + 1) + 2);
-
-// int *data3 = (int *)data;
-// data[1][2] = *(data + length * 1 + 2);
