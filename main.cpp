@@ -48,7 +48,7 @@ void initial_struct (TriangAr* the_table, int *const capacity)
 
     arithmetic_progression(the_table->table_lenght, capacity);
  
-    the_table->result = (int *)calloc(*capacity, sizeof(int));
+    the_table->result = (int*)calloc(*capacity, sizeof(int));
 
     if (the_table->result == nullptr)
     {
