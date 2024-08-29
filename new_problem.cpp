@@ -2,79 +2,89 @@
 #include <assert.h>
 #include <stdlib.h>
 
-struct ArrayData
-{
-    int rows;
-    int capacity;
+void enter_amount_of_rows(int* rows);
+void creating_arrays_using_rows(int** amount_of_elements_in_row, int*** addresses, bool *const right_enter, int rows);
 
-    int* result;
-    int* amount_of_elements_in_row;
-    int** addresses;
-};
+void filling_array_of_amount_of_element_and_finding_capacity(int* amount_of_elements_in_row, int rows, int* capacity);
+void creating_of_main_array(int** result, int capacity, bool *const right_enter);
+void filling_array_of_addresses(int capacity, int* amount_of_elements_in_row, int* result, int** addresses);
 
-void enter_amount_of_rows(ArrayData* the_table, bool *const right_enter);
+void filling_all_cells (int capacity, int* result);
+void print_all_cells (int capacity, int* result, int** addresses);
 
-void finding_capacity(ArrayData* the_table, bool *const right_enter);
+int* find_address_of_element(int** addresses);
+void change_one_element (int** addresses);
+void print_one_element (int** addresses);
 
-void filling_all_cells (ArrayData* the_table);
-void print_all_cells (ArrayData* the_table);
+void free_place (int* amount_of_elements_in_row, int* result, int** addresses);
 
-void print_one_element (ArrayData* the_table);
-void change_one_element (ArrayData* the_table);
-
-void free_place (ArrayData* the_table);
-
-//int* finding_address_of_the_cell (ArrayData* the_table) ;
 
 int main ()
 {
-    ArrayData the_table = {};
+    int rows = 0;
+    int capacity = 0;
+
+    int* result = {};
+    int* amount_of_elements_in_row = {};
+    int** addresses = {};
 
     bool right_enter = true;
 
-    enter_amount_of_rows(&the_table, &right_enter);
+    enter_amount_of_rows(&rows);
+
+    creating_arrays_using_rows(&amount_of_elements_in_row, &addresses, &right_enter, rows);
     if (right_enter == false)
         printf("there is problem with capacity\n");
 
-    finding_capacity(&the_table, &right_enter);
+    filling_array_of_amount_of_element_and_finding_capacity(amount_of_elements_in_row, rows, &capacity);
+
+    creating_of_main_array(&result, capacity, &right_enter);
     if (right_enter == false)
         printf("there is problem with capacity\n");
 
-    filling_all_cells (&the_table);
 
-    print_all_cells (&the_table);
+    filling_array_of_addresses(capacity, amount_of_elements_in_row, result, addresses);
 
-    change_one_element (&the_table);
-    print_all_cells (&the_table);
-    print_one_element (&the_table);
+    filling_all_cells (capacity, result);
 
-    free_place (&the_table);
+    print_all_cells (capacity, result, addresses);
+
+    change_one_element (addresses);
+    print_all_cells (capacity, result, addresses);
+    print_one_element (addresses);
+
+    free_place (amount_of_elements_in_row, result, addresses);
 
     return 0;
 }
 
-void enter_amount_of_rows(ArrayData* the_table, bool *const right_enter)
+
+
+void enter_amount_of_rows(int* rows)
 {
-    assert (the_table != nullptr);
-    assert (right_enter != nullptr);
-
     printf("how much rows do you want to have\n");
-    scanf("%d", &the_table->rows);                                    //first make variate and then fill the struct
-
-    the_table->amount_of_elements_in_row = (int*)calloc(the_table->rows, sizeof(int));
-    if (&the_table->amount_of_elements_in_row == nullptr)
+    scanf("%d", rows);                           
+}
+    
+void creating_arrays_using_rows(int** amount_of_elements_in_row, int*** addresses, bool *const right_enter, int rows)
+{
+    *amount_of_elements_in_row = (int*)calloc(rows, sizeof(int));
+    if (*amount_of_elements_in_row == nullptr)
         *right_enter = false;
 
-    the_table->addresses = (int**)calloc(the_table->rows, sizeof(int*));
-    if (&the_table->addresses == nullptr)
+    *addresses = (int**)calloc(rows, sizeof(int*));
+    if (*addresses == nullptr)
         *right_enter = false;
+
+    printf("start of am_of_el %p, start of addresses %p\n", amount_of_elements_in_row, addresses);
 }
 
-void finding_capacity(ArrayData* the_table, bool *const right_enter)
+
+void filling_array_of_amount_of_element_and_finding_capacity(int* amount_of_elements_in_row, int rows, int* capacity)
 {
-    assert(the_table != nullptr);
-    
-    for (int i = 1; i <= the_table->rows; i++)                    //calculation starts at 1 for users convenience
+    //printf("start of am_of_el %p\n", &amount_of_elements_in_row);
+
+    for (int i = 1; i <= rows; i++)                    //calculation starts at 1 for users convenience
     {
         printf("how much cells do you want to have in the %d row?\n", i);
 
@@ -82,124 +92,113 @@ void finding_capacity(ArrayData* the_table, bool *const right_enter)
 
         scanf("%d", &capacity_delta);
 
-        the_table->amount_of_elements_in_row[i-1] = capacity_delta;
+        amount_of_elements_in_row[i-1] = capacity_delta;
 
-        //printf("elements in row %d %d\n", i-1, the_table->amount_of_elements_in_row[i-1]);
-
-        the_table->capacity += capacity_delta;                   //data about amount of cells
+        *capacity += capacity_delta;            
     }
+}
 
-    //printf ("capacity %d", the_table->capacity);
+void creating_of_main_array(int** result, int capacity, bool *const right_enter) 
+{
+    printf("here\n");
+    *result = (int*)calloc(capacity, sizeof(int));
 
-    the_table->result = (int*)calloc(the_table->capacity, sizeof(int));
-    if (&the_table->result == nullptr)
+    if (*result == nullptr)
     {
         *right_enter = false;
     }
+}
 
-    int address_ind = 0;
+
+void filling_array_of_addresses(int capacity, int* amount_of_elements_in_row, int* result, int** addresses)
+{
+    int address_index = 0;
     int cnt_of_elements = 1;       //calculation starts with 1 for convenience
-    int elements_ind = 0;          
+    int elements_index = 0;          
 
-    for (int result_ind = 0; result_ind < the_table->capacity; result_ind++)
+    for (int result_index = 0; result_index < capacity; result_index++)
     {
-        //printf("address of element of result %p\n", &(the_table->result[result_ind]));
-
-        //printf ("cnt of elements %d, amount_of_el_in_row %d\n", cnt_of_elements, the_table->amount_of_elements_in_row[elements_ind]);
-        if (cnt_of_elements == the_table->amount_of_elements_in_row[elements_ind])
+        if (cnt_of_elements == amount_of_elements_in_row[elements_index])
         {
-            the_table->addresses[address_ind] = &(the_table->result[result_ind - cnt_of_elements + 1]);
-
-            //printf("element of address %p\n", the_table->addresses[address_ind]);
+            addresses[address_index] = &(result[result_index - cnt_of_elements + 1]);
 
             cnt_of_elements = 1;
-            elements_ind++;
-            address_ind++;
+            elements_index++;
+            address_index++;
         } 
         else
             cnt_of_elements++;
     }
 }
 
-void filling_all_cells (ArrayData* the_table)
-{
-    assert(the_table != nullptr);
 
+void filling_all_cells (int capacity, int* result)
+{
     printf("print values in cells one by one\n");
-    for (int i = 0; i < the_table->capacity; i++)
+    for (int i = 0; i < capacity; i++)
     {
-        int* cell_address = the_table->result + i;
+        int* cell_address = result + i;
 
         scanf("%d", cell_address);     //address addition
     }
 }
 
-void print_all_cells (ArrayData* the_table)
+void print_all_cells (int capacity, int* result, int** addresses)
 {
-    assert(the_table != nullptr);
-
-    int y = 0;
+    int addresses_index = 0;
 
     printf("you have printed this:\n");
 
-    for (int i = 0; i < the_table->capacity; i++)
+    for (int i = 0; i < capacity; i++)
     {   
-        int* cell_address = the_table->result + i; 
+        int* cell_address = result + i; 
 
-        if (cell_address == the_table->addresses[y])
+        if (cell_address == addresses[addresses_index])
         {
             printf("\n");
-            y++;
+            addresses_index++;
         }
         printf("%d ", *cell_address);
     }
     printf("\n");
 }
 
-void print_one_element (ArrayData* the_table)
+int* find_address_of_element(int** addresses)
 {
-    assert (the_table != nullptr);
+    int row = 0, col = 0;
 
+    scanf("%d", &row);
+    scanf("%d", &col);
+    return *(addresses + row - 1)+ col - 1;
+
+}
+
+void print_one_element (int** addresses)
+{
     printf("print row and col of cell you want to know?\n");
 
-    size_t row = 0, col = 0;
+    int* cell_address = find_address_of_element(addresses);
 
-    printf("here\n");
-    scanf("%d", &row);
-    scanf("%d", &col);
-
-    printf("row %d, col %d\n", row, col);
-
-    printf("here it is\n");
-
-    printf("%d\n", *(*(the_table->addresses + row - 1)+ col - 1));   
+    printf("%d\n", *(cell_address));   
 }
 
-void change_one_element (ArrayData* the_table)
+void change_one_element (int** addresses)
 {
-    assert (the_table != nullptr);
-    
-    printf("here\n");
-
     printf("what element do you want to change? first enter row and after it - col\n");
 
-    int row = 0, col = 0;
-    scanf("%d", &row);
-    scanf("%d", &col);
-    printf("row %d, col %d\n", row, col);
-    
+    int* cell_address = find_address_of_element(addresses);
 
     printf("print its value\n");
-    scanf("%d", *(the_table->addresses + row - 1)+ col - 1); 
+
+    scanf("%d", cell_address); 
 }
 
-void free_place (ArrayData* the_table)
+void free_place (int* amount_of_elements_in_row, int* result, int** addresses)
 {
-    assert(the_table != nullptr);
     
-    free(the_table->amount_of_elements_in_row);
-    free(the_table->result);
-    free(the_table->addresses);
+    free(amount_of_elements_in_row);
+    free(result);
+    free(addresses);
     printf("place is free\n");
 }
 
