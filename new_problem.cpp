@@ -24,7 +24,7 @@ void change_one_element (ArrayData* the_table);
 
 void free_place (ArrayData* the_table);
 
-int* finding_address_of_the_cell (ArrayData* the_table) ;
+//int* finding_address_of_the_cell (ArrayData* the_table) ;
 
 int main ()
 {
@@ -45,6 +45,7 @@ int main ()
     print_all_cells (&the_table);
 
     change_one_element (&the_table);
+    print_all_cells (&the_table);
     print_one_element (&the_table);
 
     free_place (&the_table);
@@ -83,7 +84,7 @@ void finding_capacity(ArrayData* the_table, bool *const right_enter)
 
         the_table->amount_of_elements_in_row[i-1] = capacity_delta;
 
-        printf("elements in row %d %d\n", i-1, the_table->amount_of_elements_in_row[i-1]);
+        //printf("elements in row %d %d\n", i-1, the_table->amount_of_elements_in_row[i-1]);
 
         the_table->capacity += capacity_delta;                   //data about amount of cells
     }
@@ -102,14 +103,14 @@ void finding_capacity(ArrayData* the_table, bool *const right_enter)
 
     for (int result_ind = 0; result_ind < the_table->capacity; result_ind++)
     {
-        printf("address of element of result %p\n", &(the_table->result[result_ind]));
+        //printf("address of element of result %p\n", &(the_table->result[result_ind]));
 
         //printf ("cnt of elements %d, amount_of_el_in_row %d\n", cnt_of_elements, the_table->amount_of_elements_in_row[elements_ind]);
         if (cnt_of_elements == the_table->amount_of_elements_in_row[elements_ind])
         {
             the_table->addresses[address_ind] = &(the_table->result[result_ind - cnt_of_elements + 1]);
 
-            printf("element of address %p\n", the_table->addresses[address_ind]);
+            //printf("element of address %p\n", the_table->addresses[address_ind]);
 
             cnt_of_elements = 1;
             elements_ind++;
@@ -161,19 +162,35 @@ void print_one_element (ArrayData* the_table)
 
     printf("print row and col of cell you want to know?\n");
 
+    size_t row = 0, col = 0;
+
+    printf("here\n");
+    scanf("%d", &row);
+    scanf("%d", &col);
+
+    printf("row %d, col %d\n", row, col);
+
     printf("here it is\n");
-    printf("%d\n", *finding_address_of_the_cell);   
+
+    printf("%d\n", *(*(the_table->addresses + row - 1)+ col - 1));   
 }
 
 void change_one_element (ArrayData* the_table)
 {
     assert (the_table != nullptr);
+    
+    printf("here\n");
 
     printf("what element do you want to change? first enter row and after it - col\n");
 
-    printf("print its value\n");
+    int row = 0, col = 0;
+    scanf("%d", &row);
+    scanf("%d", &col);
+    printf("row %d, col %d\n", row, col);
+    
 
-    scanf("%d", finding_address_of_the_cell);   
+    printf("print its value\n");
+    scanf("%d", *(the_table->addresses + row - 1)+ col - 1); 
 }
 
 void free_place (ArrayData* the_table)
@@ -186,10 +203,3 @@ void free_place (ArrayData* the_table)
     printf("place is free\n");
 }
 
-int* finding_address_of_the_cell (ArrayData* the_table) 
-{
-    size_t row = 0, col = 0;
-    scanf("%d", &row);
-    scanf("%d", &col);
-    return (the_table->addresses[row - 1] + col - 1);
-}
